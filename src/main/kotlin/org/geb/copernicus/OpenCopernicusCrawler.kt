@@ -1,6 +1,7 @@
 package org.geb.copernicus
 
 import kotlinx.coroutines.channels.Channel
+import okhttp3.OkHttpClient
 import org.geb.*
 import java.time.Duration
 import java.time.Instant
@@ -10,6 +11,7 @@ class OpenCopernicusCrawler(
         override val initialDelay: Duration,
         override val delay: Duration
 ) : Crawler {
+
 
     override val sensor: Sensor
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
@@ -27,6 +29,8 @@ class OpenCopernicusCrawler(
     }
 
     override suspend fun search(begin: Instant): Channel<ImageDescription> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
+
+    data class Config(val client: OkHttpClient)
 }

@@ -4,7 +4,7 @@ import org.geb.event.EventManager
 import org.geb.lock.Lock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
@@ -54,12 +54,12 @@ class Geb(private val config: Config) {
                 val imageStore = getStore(crawler.id)
 
                 if (timeline.isEmpty) {
-                    register(crawler.search(timeline.begin), timeline, imageStore)
+                    register(crawler.search(timeline.begin, scope), timeline, imageStore)
                 }
 
                 while (true) {
                     delay(crawler.delay.toMillis())
-                    register(crawler.search(timeline.last), timeline, imageStore)
+                    register(crawler.search(timeline.last, scope), timeline, imageStore)
                 }
             } catch (e: Exception) {
                 eManager.fail(e)
@@ -88,7 +88,7 @@ class Geb(private val config: Config) {
             }
         }
 
-        private suspend fun register(channel: Channel<ImageDescription>, timeline: Timeline, store: ImageStore) {
+        private suspend fun register(channel: ReceiveChannel<ImageDescription>, timeline: Timeline, store: ImageStore) {
             for (image in channel) {
                 val published = if (image.isReady) {
                     if (image.shouldDownload) {

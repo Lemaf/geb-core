@@ -1,6 +1,7 @@
 package org.geb
 
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.ReceiveChannel
 import java.time.Duration
 import java.time.Instant
 
@@ -20,5 +21,5 @@ interface Crawler {
 
     fun publish(image: ImageDescription): PublishedImage
 
-    suspend fun search(begin: Instant): Channel<ImageDescription>
+    suspend fun search(begin: Instant, scope: CoroutineScope): ReceiveChannel<ImageDescription>
 }
